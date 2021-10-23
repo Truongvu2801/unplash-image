@@ -1,18 +1,12 @@
 import './App.scss';
-import { Input, Card } from 'antd';
+import { AppContextProvider } from './context/ProvideAppContext'
+import ListCards from './views/ListCards';
 
 function App() {
   return (
-    <div className="App">
-      <Input placeholder="Search" />
-      <Card
-        hoverable
-        style={{ width: 240 }}
-        cover={<img alt="example" src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png" />}
-      >
-      hehe
-      </Card>,
-    </div>
+    <AppContextProvider>
+      <ListCards/>
+    </AppContextProvider>
   );
 }
 
