@@ -1,7 +1,10 @@
 import {
   CARD_LOADING,
   CARD_LOADING_SUCCESS,
-  CARD_LOADING_ERROR
+  CARD_LOADING_ERROR,
+  SEARCH_CARD_SUCCESS,
+  SEARCH_CARD,
+  SEARCH_CARD_ERROR
 } from "../../constants/actionTypes";
 
 const cards = (state, { payload, type }) => {
@@ -26,6 +29,35 @@ const cards = (state, { payload, type }) => {
       }
     }
     case CARD_LOADING_ERROR: {
+      return {
+        ...state,
+        cards: {
+          ...state.cards,
+          loading: false,
+          error: payload
+        }
+      }
+    }
+    case SEARCH_CARD: {
+      return {
+        ...state,
+        cards: {
+          ...state.cards,
+          loading: true
+        }
+      }
+    }
+    case SEARCH_CARD_SUCCESS: {
+      return {
+        ...state,
+        cards: {
+          ...state.cards,
+          loading: false,
+          data: payload
+        }
+      }
+    }
+    case SEARCH_CARD_ERROR: {
       return {
         ...state,
         cards: {

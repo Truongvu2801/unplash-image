@@ -10,7 +10,7 @@ export default (dispatch) => {
     type: CARD_LOADING
   });
   axiosInstance()
-    .get("/photos")
+    .get("/photos?client_id=GsAbrGI8-gYnM1ghFXv6WFLy78ky4lwmCGxRgw5AYDM")
     .then(res => {
       dispatch({
         type: CARD_LOADING_SUCCESS,

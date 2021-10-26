@@ -1,9 +1,14 @@
 import React, { useEffect, useContext } from 'react';
-import { Input, Card, Row, Col, Divider } from 'antd';
+import { Row, Col, Layout } from 'antd';
 import './styles.scss';
 
 import { AppContext } from '../../context/ProvideAppContext';
 import getCards from '../../context/actions/card/getCards';
+import searchCard from '../../context/actions/card/searchCard';
+import CardItem from './CardItem';
+import FormInput from '../../components/FormInput';
+
+const { Header, Content } = Layout;
 
 const ListCards = () => {
   const { cardsState, cardsDispatch } = useContext(AppContext)
@@ -15,39 +20,32 @@ const ListCards = () => {
     if(data.length === 0) {
       getCards(cardsDispatch)
     }
-  }, [])
+  }, [data])
+
+  const handleChangeInput = function(e) {
+    searchCard(e.target.value)(cardsDispatch)
+  }
 
   return (
-    <>
-      <Input placeholder="Search" />
-      <Row gutter={[16, 24]}>
-        
+    <Layout>
+      <Header>
+        <FormInput placeholder={'Search'} handleChangeInput={handleChangeInput}/>
+      </Header>
+      <Content style={{ padding: '20px 140px' }}>
+        <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
           {
             data.map(card => {
               const { user, urls } = card;
-              console.log('urls: ', card);
               return (
-                <Col className="gutter-row" span={6}>
-                  <Card
-                    hoverable
-                    style={{ width: 240 }}
-                    cover={<img alt="example" src={urls.small} />}
-                    key={card.id}
-                    >
-                    <div className="cardItem"> 
-                      <img src={user.profile_image.small} alt=""/>
-                      <article>
-                        <h3>A Photo By: {user.name}</h3>
-                        <p>{user.bio}</p>
-                      </article>
-                    </div>
-                  </Card>
+                <Col className="gutter-row" key={card.id} span={6}>
+                  <CardItem urls={urls} user={user}/>
                 </Col>
               )
             })
           }
-      </Row>
-    </>
+        </Row>
+      </Content>
+    </Layout>
   )
 }
 
