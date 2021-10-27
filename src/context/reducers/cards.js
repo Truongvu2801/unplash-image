@@ -24,7 +24,8 @@ const cards = (state, { payload, type }) => {
         cards: {
           ...state.cards,
           loading: false,
-          data: payload
+          hasMore: payload.length > 0,
+          data: [...state.cards.data, ...payload]
         }
       }
     }

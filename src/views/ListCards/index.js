@@ -1,5 +1,6 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect, useContext, useRef, useState, useCallback } from 'react';
 import { Row, Col, Layout } from 'antd';
+
 import './styles.scss';
 
 import { AppContext } from '../../context/ProvideAppContext';
@@ -11,19 +12,40 @@ import FormInput from '../../components/FormInput';
 const { Header, Content } = Layout;
 
 const ListCards = () => {
+  const LIMIT = 12;
+  const [page, setPage] = useState(0);
   const { cardsState, cardsDispatch } = useContext(AppContext)
-  const {
-    cards: { data },
-  } = cardsState
+  const typingTimeoutRef = useRef(null);
+  const observer = useRef();
+  const { cards: { data, hasMore, loading } } = cardsState;
+
+  const lastCardElementRef = useCallback(node => {
+    if(observer.current) observer.current.disconnect()
+    observer.current = new IntersectionObserver(entries => {
+      if(entries[0].isIntersecting && hasMore) {
+        handleLoadMore()
+      }
+    })
+    if(node) observer.current.observe(node)
+  }, [loading, hasMore])
+
+
+  function handleLoadMore() {
+    setPage(page + 1);
+  }
 
   useEffect(() => {
-    if(data.length === 0) {
-      getCards(cardsDispatch)
-    }
-  }, [data])
+    getCards(page, LIMIT)(cardsDispatch)
+  }, [page])
 
   const handleChangeInput = function(e) {
-    searchCard(e.target.value)(cardsDispatch)
+    if(typingTimeoutRef.current) {
+      clearTimeout(typingTimeoutRef.current)
+    }
+
+    typingTimeoutRef.current = setTimeout(() => {
+      searchCard(e.target.value)(cardsDispatch)
+    }, 400);
   }
 
   return (
@@ -31,16 +53,25 @@ const ListCards = () => {
       <Header>
         <FormInput placeholder={'Search'} handleChangeInput={handleChangeInput}/>
       </Header>
+      {loading && <p>Loading...</p>}
       <Content style={{ padding: '20px 140px' }}>
         <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
           {
-            data.map(card => {
+            data.map((card, index )=> {
               const { user, urls } = card;
-              return (
-                <Col className="gutter-row" key={card.id} span={6}>
-                  <CardItem urls={urls} user={user}/>
-                </Col>
-              )
+              if(data.length === index + 1) {
+                return (
+                  <Col className="gutter-row" key={card.id} span={6}>
+                    <CardItem urls={urls} user={user} innerRef={lastCardElementRef}/>
+                  </Col>
+                ) 
+              } else {
+                return (
+                  <Col className="gutter-row" key={card.id} span={6}>
+                    <CardItem urls={urls} user={user}/>
+                  </Col>
+                ) 
+              }
             })
           }
         </Row>

@@ -13,7 +13,6 @@ export default (searchText) => (dispatch) => {
   axiosInstance()
     .get(`/search/photos?query=${searchText}&client_id=GsAbrGI8-gYnM1ghFXv6WFLy78ky4lwmCGxRgw5AYDM`)
     .then(res => {
-      console.log(res);
       dispatch({
         type: SEARCH_CARD_SUCCESS,
         payload: res.data.results
