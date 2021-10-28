@@ -10,7 +10,7 @@ const CardItem = ({user, urls, innerRef}) => {
       cover={<img alt="example" src={urls.small} />}
     >
       <div className="cardItem" ref={innerRef}> 
-        <img src={user.profile_image.small} alt=""/>
+        <img src={user?.profile_image.small} alt="profile"/>
         <article>
           <h3>A Photo By: {user.name}</h3>
           <p>{user.bio}</p>

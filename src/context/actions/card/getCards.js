@@ -5,12 +5,12 @@ import {
   CARD_LOADING_ERROR
 } from '../../../constants/actionTypes'
 
-export default (page, limit) => (dispatch) => {
+const getCards = (page, limit) => (dispatch) => {
   dispatch({
     type: CARD_LOADING
   });
   axiosInstance()
-    .get(`/photos?page=${page}&per_page=${limit}&client_id=GsAbrGI8-gYnM1ghFXv6WFLy78ky4lwmCGxRgw5AYDM`)
+    .get(`/photos?page=${page}&per_page=${limit}`)
     .then(res => {
       dispatch({
         type: CARD_LOADING_SUCCESS,
@@ -24,3 +24,5 @@ export default (page, limit) => (dispatch) => {
       })
     })
 }
+
+export default getCards;

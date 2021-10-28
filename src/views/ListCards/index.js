@@ -6,6 +6,7 @@ import './styles.scss';
 import { AppContext } from '../../context/ProvideAppContext';
 import getCards from '../../context/actions/card/getCards';
 import searchCard from '../../context/actions/card/searchCard';
+import resetState from '../../context/actions/resetState';
 import CardItem from './CardItem';
 import FormInput from '../../components/FormInput';
 
@@ -14,6 +15,7 @@ const { Header, Content } = Layout;
 const ListCards = () => {
   const LIMIT = 12;
   const [page, setPage] = useState(0);
+  const [isSearching, setIsSearching] = useState(false);
   const { cardsState, cardsDispatch } = useContext(AppContext)
   const typingTimeoutRef = useRef(null);
   const observer = useRef();
@@ -35,16 +37,27 @@ const ListCards = () => {
   }
 
   useEffect(() => {
+    if(isSearching) return;
     getCards(page, LIMIT)(cardsDispatch)
-  }, [page])
+  }, [page, isSearching])
 
   const handleChangeInput = function(e) {
+    const valueSearch = e.target.value;
+    if(valueSearch.length > 0) {
+      resetState()(cardsDispatch)
+      setPage(0)
+      setIsSearching(true)
+    } else {
+      setIsSearching(false)
+      return
+    }
+    
     if(typingTimeoutRef.current) {
       clearTimeout(typingTimeoutRef.current)
     }
 
     typingTimeoutRef.current = setTimeout(() => {
-      searchCard(e.target.value)(cardsDispatch)
+      searchCard(page, LIMIT)(valueSearch)(cardsDispatch)
     }, 400);
   }
 
@@ -53,21 +66,21 @@ const ListCards = () => {
       <Header>
         <FormInput placeholder={'Search'} handleChangeInput={handleChangeInput}/>
       </Header>
-      {loading && <p>Loading...</p>}
       <Content style={{ padding: '20px 140px' }}>
+        {loading && <p>Loading...</p>}
         <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
           {
-            data.map((card, index )=> {
-              const { user, urls } = card;
+            data && data.map((card, index )=> {
+              const { user, urls } = card
               if(data.length === index + 1) {
                 return (
-                  <Col className="gutter-row" key={card.id} span={6}>
+                  <Col className="gutter-row" span={6}>
                     <CardItem urls={urls} user={user} innerRef={lastCardElementRef}/>
                   </Col>
                 ) 
               } else {
                 return (
-                  <Col className="gutter-row" key={card.id} span={6}>
+                  <Col className="gutter-row" span={6}>
                     <CardItem urls={urls} user={user}/>
                   </Col>
                 ) 

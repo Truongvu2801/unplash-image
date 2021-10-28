@@ -1,8 +1,10 @@
-export default {
+const initialState = {
   cards: {
     loading: false,
     error: null,
     hasMore: false,
-    data: []
+    data: [],
   }
 }
+
+export default initialState;

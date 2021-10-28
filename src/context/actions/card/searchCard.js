@@ -5,13 +5,13 @@ import {
   SEARCH_CARD_ERROR
 } from '../../../constants/actionTypes'
 
-export default (searchText) => (dispatch) => {
+const searchCard = (page, limit) => (searchText) => (dispatch) => {
   dispatch({
     type: SEARCH_CARD,
     payload: searchText
   });
   axiosInstance()
-    .get(`/search/photos?query=${searchText}&client_id=GsAbrGI8-gYnM1ghFXv6WFLy78ky4lwmCGxRgw5AYDM`)
+    .get(`/search/photos?query=${searchText}&page=${page}&per_page=${limit}`)
     .then(res => {
       dispatch({
         type: SEARCH_CARD_SUCCESS,
@@ -25,3 +25,5 @@ export default (searchText) => (dispatch) => {
       })
     })
 }
+
+export default searchCard;

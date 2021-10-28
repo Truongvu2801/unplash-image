@@ -4,8 +4,10 @@ import {
   CARD_LOADING_ERROR,
   SEARCH_CARD_SUCCESS,
   SEARCH_CARD,
-  SEARCH_CARD_ERROR
+  SEARCH_CARD_ERROR,
+  RESET_STATE
 } from "../../constants/actionTypes";
+import cardInitialState from "../initialStates/cardInitialState";
 
 const cards = (state, { payload, type }) => {
   switch(type) {
@@ -14,7 +16,7 @@ const cards = (state, { payload, type }) => {
         ...state,
         cards: {
           ...state.cards,
-          loading: true
+          loading: true,
         }
       }
     }
@@ -44,7 +46,7 @@ const cards = (state, { payload, type }) => {
         ...state,
         cards: {
           ...state.cards,
-          loading: true
+          loading: true,
         }
       }
     }
@@ -54,7 +56,7 @@ const cards = (state, { payload, type }) => {
         cards: {
           ...state.cards,
           loading: false,
-          data: payload
+          data: [...state.cards.data, ...payload]
         }
       }
     }
@@ -66,6 +68,13 @@ const cards = (state, { payload, type }) => {
           loading: false,
           error: payload
         }
+      }
+    }
+    case RESET_STATE: {
+      const { cards } = cardInitialState
+      return {
+        ...state,
+        cards
       }
     }
     default:
