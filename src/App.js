@@ -1,11 +1,11 @@
 import './App.scss';
 import { AppContextProvider } from './context/ProvideAppContext'
-import ListCards from './views/ListCards';
+import CardsPage from './views/ListCards/CardsPage'
 
 function App() {
   return (
     <AppContextProvider>
-      <ListCards/>
+      <CardsPage/>
     </AppContextProvider>
   );
 }

@@ -49,6 +49,7 @@ const ListCards = () => {
       setIsSearching(true)
     } else {
       setIsSearching(false)
+      setPage(0)
       return
     }
     
@@ -68,19 +69,29 @@ const ListCards = () => {
       </Header>
       <Content style={{ padding: '20px 140px' }}>
         {loading && <p>Loading...</p>}
-        <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
+        <Row className="list-cards" gutter={[24, 16]}>
           {
             data && data.map((card, index )=> {
               const { user, urls } = card
               if(data.length === index + 1) {
                 return (
-                  <Col className="gutter-row" span={6}>
+                  <Col 
+                    className="gutter-row"
+                    xs={{ span: 23, offset: 1 }}
+                    sm={{ span: 10, offset: 1}}
+                    lg={{ span: 5, offset: 0}}
+                  >
                     <CardItem urls={urls} user={user} innerRef={lastCardElementRef}/>
                   </Col>
                 ) 
               } else {
                 return (
-                  <Col className="gutter-row" span={6}>
+                  <Col 
+                    className="gutter-row"
+                    xs={{ span: 23, offset: 1 }}
+                    sm={{ span: 10, offset: 1}}
+                    lg={{ span: 5, offset: 0}}
+                  >
                     <CardItem urls={urls} user={user}/>
                   </Col>
                 ) 
