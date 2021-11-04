@@ -1,8 +1,10 @@
-import { render, screen } from '@testing-library/react';
-import App from './App';
+// import React from 'react';
+// import { render, screen } from '@testing-library/react';
+// import ProvideAppContext from './context/ProvideAppContext';
+// import CardsPage from './views/ListCards/CardsPage'
 
-test('renders learn react link', () => {
-  render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
-});
+describe('App', function () {
+  test('renders react app', async () => {
+  });
+})
+

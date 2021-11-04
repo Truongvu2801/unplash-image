@@ -6,6 +6,7 @@ const FormInput = ({ placeholder, handleChangeInput }) => {
     <Input 
       placeholder = {placeholder}
       onChange={handleChangeInput}
+      aria-label="form-input"
     />
   )
 }

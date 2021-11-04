@@ -7,7 +7,7 @@ const ReadMore = ({ children }) => {
       {text !== null && text.length > 130 ? 
       <> 
         {text.slice(0, 120)}
-        <a className="read-or-hide">
+        <a href="#/" className="read-or-hide">
         ...read more
         </a>
       </> : text}
